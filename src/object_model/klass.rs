@@ -23,7 +23,8 @@ impl Klass {
         let u32_byte_size = self.u64_size as usize * 4;
         let u16_byte_size = self.u64_size as usize * 2;
         let u8_byte_size = self.u64_size as usize;
-        let total_byte_size = reference_byte_size + u64_byte_size + u32_byte_size + u16_byte_size + u8_byte_size;
+        let total_byte_size =
+            reference_byte_size + u64_byte_size + u32_byte_size + u16_byte_size + u8_byte_size;
         align(total_byte_size, 8)
     }
 }
@@ -34,7 +35,7 @@ pub struct Field {
 }
 
 pub enum ValueType {
-    Reference(String),
+    Reference(Option<String>),
     Array(Box<ValueType>),
     U64,
     I64,
