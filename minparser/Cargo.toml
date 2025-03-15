@@ -1,11 +1,6 @@
 [package]
-name = "row_vm"
+name = "minparser"
 version = "0.1.0"
 edition = "2021"
-
-[workspace]
-members = [
-    "minparser"
-]
 
 [dependencies]

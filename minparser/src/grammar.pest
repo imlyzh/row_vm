@@ -1,0 +1,46 @@
+expression = { (message | sctpad)+ }
+message = {
+    wcpad* ~ symbol ~ scpad* ~ arguments*
+}
+arguments = {
+    Open ~ (argument ~ (Comma ~ argument)*)* ~ Close
+}
+argument = {
+    wcpad* ~expression ~ wcpad*
+}
+
+symbol = {
+    number | Operator | quote | Identifier
+}
+Identifier = { (letter | digit | "_")+ }
+Operator = { (":" | "." | "'" | "~" | "!" | "@" | "$" |
+"%" | "^" | "&" | "*" | "-" | "+" | "/" | "=" | "{" | "}" |
+"[" | "]" | "|" | "\\" | "<" | ">" | "?")+ }
+
+quote = { MonoQuote | TriQuote }
+MonoQuote = {"\"" ~ (!"\"" ~ "\\\"")* ~ "\"" }
+TriQuote = { "\"\"\"" ~ (!"\"\"\"" ~ ANY)* ~ "\"\"\"" }
+
+Terminator = { (separator* ~ (";" | "\n" | "\r") ~ separator*)+ }
+separator = { (" " | "\t" )+ }
+whitespace = { (" " | "\r" | "\t" | "\n")+ }
+sctpad = { separator | Comment | Terminator }
+scpad = { separator | Comment }
+wcpad = { whitespace | Comment }
+
+Comment = { slashStarComment | slashSlashComment | poundComment }
+slashStarComment = { "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
+slashSlashComment = { "//" ~(!"\n" ~ ANY)* ~ "\n" }
+poundComment = { "#" ~ (!"\n" ~ ANY)* ~ "\n" }
+
+number = _{ Decimal | HexNumber }
+HexNumber = _{ "0" ~ ("x" | "X") ~ (digit | hexLetter)+ }
+hexLetter = _{ "a" | "b" | "c" | "d" | "e" | "f" }
+Decimal = _{ (digits ~ "." ~ digits ~ ("e" ~ "-"? ~ digits)?) | ("." ~ digits) | digits }
+
+Comma = _{","}
+Open = _{"(" | "[" | "{"}
+Close = _{")" | "]" | "}"}
+letter = _{'a' .. 'z' | 'A' .. 'Z'}
+digit = _{'0' .. '9'}
+digits = _{ digit+ }

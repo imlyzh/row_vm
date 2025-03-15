@@ -3,7 +3,9 @@ use std::{collections::HashMap, ptr::NonNull};
 use crate::utils::{align, align_reference};
 
 pub struct Klass {
-    pub field_list: HashMap<String, Field>,
+    pub klass_name: String,
+    // pub static_fields: HashMap<String, Field>,
+    pub fields: HashMap<String, Field>,
     pub reference_size: u16,
     pub u64_size: u16,
     pub u32_size: u16,
