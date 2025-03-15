@@ -2,17 +2,16 @@ expression = { (message | sctpad)+ }
 message = {
     wcpad* ~ symbol ~ scpad* ~ arguments*
 }
-arguments = {
-    Open ~ (argument ~ (Comma ~ argument)*)* ~ Close
-}
-argument = {
-    wcpad* ~expression ~ wcpad*
-}
+arguments =
+    { ("(" ~ (argument ~ (Comma ~ argument)*)* ~ ")")
+    | ("[" ~ (argument ~ (Comma ~ argument)*)* ~ "]")
+    | ("{" ~ (argument ~ (Comma ~ argument)*)* ~ "}")
+    }
+argument = { wcpad* ~expression ~ wcpad* }
 
-symbol = {
-    number | Operator | quote | Identifier
-}
-Identifier = { (!whitespace ~ ANY)+ }
+symbol = { number | Operator | quote | Identifier }
+
+Identifier = { (!(whitespace | "(" | ")" | number | Operator | quote) ~ ANY)+ }
 Operator = { (":" | "." | "'" | "~" | "!" | "@" | "$" |
 "%" | "^" | "&" | "*" | "-" | "+" | "/" | "=" | "{" | "}" |
 "[" | "]" | "|" | "\\" | "<" | ">" | "?")+ }
@@ -39,8 +38,5 @@ hexLetter = _{ "a" | "b" | "c" | "d" | "e" | "f" }
 Decimal = _{ (digits ~ "." ~ digits ~ ("e" ~ "-"? ~ digits)?) | ("." ~ digits) | digits }
 
 Comma = _{","}
-Open = _{"(" | "[" | "{"}
-Close = _{")" | "]" | "}"}
-letter = _{'a' .. 'z' | 'A' .. 'Z'}
 digit = _{'0' .. '9'}
 digits = _{ digit+ }
