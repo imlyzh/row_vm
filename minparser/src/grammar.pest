@@ -12,7 +12,7 @@ argument = {
 symbol = {
     number | Operator | quote | Identifier
 }
-Identifier = { (letter | digit | "_")+ }
+Identifier = { (!whitespace ~ ANY)+ }
 Operator = { (":" | "." | "'" | "~" | "!" | "@" | "$" |
 "%" | "^" | "&" | "*" | "-" | "+" | "/" | "=" | "{" | "}" |
 "[" | "]" | "|" | "\\" | "<" | ">" | "?")+ }
