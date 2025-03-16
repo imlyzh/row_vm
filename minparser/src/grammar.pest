@@ -1,11 +1,11 @@
 expression = { (message | sctpad)+ }
 message = { wcpad* ~ symbol ~ scpad* ~ arguments* }
 arguments =
-    { ("(" ~ (argument ~ (Comma ~ argument)*)* ~ ")")
-    // | ("[" ~ (argument ~ (Comma ~ argument)*)* ~ "]")
-    // | ("{" ~ (argument ~ (Comma ~ argument)*)* ~ "}")
+    { ("(" ~ (argument ~ (Comma ~ argument)*)? ~ ")")
+    // | ("[" ~ (argument ~ (Comma ~ argument)*)? ~ "]")
+    // | ("{" ~ (argument ~ (Comma ~ argument)*)? ~ "}")
     }
-argument = { wcpad* ~ expression ~ wcpad* }
+argument = { wcpad? ~ expression ~ wcpad? }
 
 symbol = { number | Operator | quote | Identifier }
 
