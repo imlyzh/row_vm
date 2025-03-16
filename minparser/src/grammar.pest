@@ -1,36 +1,34 @@
 expression = { (message | sctpad)+ }
-message = {
-    wcpad* ~ symbol ~ scpad* ~ arguments*
-}
+message = { wcpad* ~ symbol ~ scpad* ~ arguments* }
 arguments =
     { ("(" ~ (argument ~ (Comma ~ argument)*)* ~ ")")
-    | ("[" ~ (argument ~ (Comma ~ argument)*)* ~ "]")
-    | ("{" ~ (argument ~ (Comma ~ argument)*)* ~ "}")
+    // | ("[" ~ (argument ~ (Comma ~ argument)*)* ~ "]")
+    // | ("{" ~ (argument ~ (Comma ~ argument)*)* ~ "}")
     }
-argument = { wcpad* ~expression ~ wcpad* }
+argument = { wcpad* ~ expression ~ wcpad* }
 
 symbol = { number | Operator | quote | Identifier }
 
-Identifier = { (!(whitespace | "(" | ")" | number | Operator | quote) ~ ANY)+ }
+Identifier = _{ (!(whitespace | "(" | ")" | Terminator | number | Operator | quote) ~ ANY)+ }
 Operator = { (":" | "." | "'" | "~" | "!" | "@" | "$" |
 "%" | "^" | "&" | "*" | "-" | "+" | "/" | "=" | "{" | "}" |
 "[" | "]" | "|" | "\\" | "<" | ">" | "?")+ }
 
 quote = { MonoQuote | TriQuote }
-MonoQuote = {"\"" ~ (!"\"" ~ "\\\"")* ~ "\"" }
-TriQuote = { "\"\"\"" ~ (!"\"\"\"" ~ ANY)* ~ "\"\"\"" }
+MonoQuote = _{"\"" ~ (!"\"" ~ "\\\"")* ~ "\"" }
+TriQuote = _{ "\"\"\"" ~ (!"\"\"\"" ~ ANY)* ~ "\"\"\"" }
 
-Terminator = { (separator* ~ (";" | "\n" | "\r") ~ separator*)+ }
-separator = { (" " | "\t" )+ }
-whitespace = { (" " | "\r" | "\t" | "\n")+ }
-sctpad = { separator | Comment | Terminator }
-scpad = { separator | Comment }
-wcpad = { whitespace | Comment }
+Terminator = _{ (separator* ~ (";" | "\n" | "\r") ~ separator*)+ }
+separator = _{ (" " | "\t" )+ }
+whitespace = _{ (" " | "\r" | "\t" | "\n")+ }
+sctpad = _{ separator | Comment | Terminator }
+scpad = _{ separator | Comment }
+wcpad = _{ whitespace | Comment }
 
-Comment = { slashStarComment | slashSlashComment | poundComment }
-slashStarComment = { "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
-slashSlashComment = { "//" ~(!"\n" ~ ANY)* ~ "\n" }
-poundComment = { "#" ~ (!"\n" ~ ANY)* ~ "\n" }
+Comment = _{ slashStarComment | slashSlashComment | poundComment }
+slashStarComment = _{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
+slashSlashComment = _{ "//" ~(!"\n" ~ ANY)* ~ "\n" }
+poundComment = _{ "#" ~ (!"\n" ~ ANY)* ~ "\n" }
 
 number = _{ Decimal | HexNumber }
 HexNumber = _{ "0" ~ ("x" | "X") ~ (digit | hexLetter)+ }
