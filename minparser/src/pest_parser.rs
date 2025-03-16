@@ -1,4 +1,4 @@
-use pest::iterators::{Pair, Pairs};
+use pest::{error::Error, iterators::{Pair, Pairs}, Parser};
 use pest_derive::Parser;
 
 use crate::surface::{Args, Argument, Expression, Message, Symbol};
@@ -6,6 +6,12 @@ use crate::surface::{Args, Argument, Expression, Message, Symbol};
 #[derive(Parser)]
 #[grammar = "./src/grammar.pest"]
 pub struct RowVMParser {}
+
+pub fn parse(input: &str) -> Result<Vec<Expression>, Error<Rule>> {
+    let pairs = RowVMParser::parse(Rule::expression, input)?;
+    let r = pairs.map(parse_to_expression).collect();
+    Ok(r)
+}
 
 pub fn parse_to_expression(pair: Pair<Rule>) -> Expression {
     debug_assert_eq!(pair.as_rule(), Rule::expression);
