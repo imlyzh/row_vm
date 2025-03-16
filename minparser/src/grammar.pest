@@ -9,7 +9,7 @@ argument = { wcpad? ~ expression ~ wcpad? }
 
 symbol = { number | Operator | quote | Identifier }
 
-Identifier = _{ (!(whitespace | "(" | ")" | "," | Terminator | number | Operator | quote) ~ ANY)+ }
+Identifier = { (!(whitespace | "(" | ")" | "," | Terminator | number | Operator | quote) ~ ANY)+ }
 Operator = { (":" | "." | "'" | "~" | "!" | "@" | "$" |
 "%" | "^" | "&" | "*" | "-" | "+" | "/" | "=" | "{" | "}" |
 "[" | "]" | "|" | "\\" | "<" | ">" | "?")+ }
@@ -30,7 +30,7 @@ slashStarComment = _{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
 slashSlashComment = _{ "//" ~(!"\n" ~ ANY)* ~ "\n" }
 poundComment = _{ "#" ~ (!"\n" ~ ANY)* ~ "\n" }
 
-number = _{ Decimal | HexNumber }
+number = { Decimal | HexNumber }
 HexNumber = _{ "0" ~ ("x" | "X") ~ (digit | hexLetter)+ }
 hexLetter = _{ "a" | "b" | "c" | "d" | "e" | "f" }
 Decimal = _{ (digits ~ "." ~ digits ~ ("e" ~ "-"? ~ digits)?) | ("." ~ digits) | digits }
