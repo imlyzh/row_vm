@@ -37,7 +37,8 @@ pub struct Field {
 }
 
 pub enum ValueType {
-    Reference(Option<String>),
+    Ref64(Option<String>),
+    Ref32(Option<String>),
     Array(Box<ValueType>),
     U64,
     I64,
