@@ -1,4 +1,3 @@
-
 #[inline]
 pub fn align_reference(raw_size: usize) -> usize {
     align(raw_size, 8)

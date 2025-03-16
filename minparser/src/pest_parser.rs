@@ -1,11 +1,10 @@
-
 use pest::iterators::{Pair, Pairs};
 use pest_derive::Parser;
 
 use crate::surface::{Args, Argument, Expression, Message, Symbol};
 
 #[derive(Parser)]
-#[grammar="./src/grammar.pest"]
+#[grammar = "./src/grammar.pest"]
 pub struct RowVMParser {}
 
 pub fn parse_to_expression(pair: Pair<Rule>) -> Expression {
@@ -16,7 +15,7 @@ pub fn parse_to_expression(pair: Pair<Rule>) -> Expression {
         match pair.as_rule() {
             Rule::message => {
                 return_collect.push(parse_to_message(pair));
-            },
+            }
             _ => {}
         }
     }
@@ -59,18 +58,10 @@ pub fn parse_to_symbol(pair: Pair<Rule>) -> Symbol {
     let pair = pair.into_inner().next().unwrap();
     let s = pair.as_str();
     match pair.as_rule() {
-        Rule::number => {
-            Symbol::Number(s)
-        },
-        Rule::Operator => {
-            Symbol::Operator(s)
-        },
-        Rule::quote => {
-            Symbol::Quote(s)
-        },
-        Rule::Identifier => {
-            Symbol::Identifier(s)
-        },
+        Rule::number => Symbol::Number(s),
+        Rule::Operator => Symbol::Operator(s),
+        Rule::quote => Symbol::Quote(s),
+        Rule::Identifier => Symbol::Identifier(s),
         _ => unreachable!(),
     }
 }
