@@ -9,7 +9,7 @@ argument = { wcpad? ~ expression ~ wcpad? }
 
 symbol = { number | Operator | quote | Identifier }
 
-Identifier = _{ (!(whitespace | "(" | ")" | Terminator | number | Operator | quote) ~ ANY)+ }
+Identifier = _{ (!(whitespace | "(" | ")" | "," | Terminator | number | Operator | quote) ~ ANY)+ }
 Operator = { (":" | "." | "'" | "~" | "!" | "@" | "$" |
 "%" | "^" | "&" | "*" | "-" | "+" | "/" | "=" | "{" | "}" |
 "[" | "]" | "|" | "\\" | "<" | ">" | "?")+ }
