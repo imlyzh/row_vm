@@ -2,12 +2,26 @@
 use pest::iterators::{Pair, Pairs};
 use pest_derive::Parser;
 
-use crate::surface::{Args, Message, Symbol};
+use crate::surface::{Args, Argument, Expression, Message, Symbol};
 
 #[derive(Parser)]
 #[grammar="./src/grammar.pest"]
 pub struct RowVMParser {}
 
+pub fn parse_to_expression(pair: Pair<Rule>) -> Expression {
+    debug_assert_eq!(pair.as_rule(), Rule::expression);
+    let mut pairs = pair.into_inner();
+    let mut return_collect = vec![];
+    while let Some(pair) = pairs.next() {
+        match pair.as_rule() {
+            Rule::message => {
+                return_collect.push(parse_to_message(pair));
+            },
+            _ => {}
+        }
+    }
+    return_collect
+}
 
 pub fn parse_to_message(pair: Pair<Rule>) -> Message {
     debug_assert_eq!(pair.as_rule(), Rule::message);
@@ -27,14 +41,38 @@ pub fn parse_to_message(pair: Pair<Rule>) -> Message {
     }
 }
 
-pub fn parse_to_arguments<'a>(pair: Pair<'a, Rule>) -> Args<'a> {
+pub fn parse_to_arguments(pair: Pair<Rule>) -> Args {
     debug_assert_eq!(pair.as_rule(), Rule::arguments);
-    todo!()
+    pair.into_inner().map(parse_to_argument).collect()
+}
+
+pub fn parse_to_argument(pair: Pair<Rule>) -> Argument {
+    debug_assert_eq!(pair.as_rule(), Rule::argument);
+    let mut pairs = pair.into_inner();
+    let expression = take_whitespace(&mut pairs).unwrap();
+    let expr = parse_to_expression(expression);
+    expr
 }
 
 pub fn parse_to_symbol(pair: Pair<Rule>) -> Symbol {
     debug_assert_eq!(pair.as_rule(), Rule::symbol);
-    todo!()
+    let pair = pair.into_inner().next().unwrap();
+    let s = pair.as_str();
+    match pair.as_rule() {
+        Rule::number => {
+            Symbol::Number(s)
+        },
+        Rule::Operator => {
+            Symbol::Operator(s)
+        },
+        Rule::quote => {
+            Symbol::Quote(s)
+        },
+        Rule::Identifier => {
+            Symbol::Identifier(s)
+        },
+        _ => unreachable!(),
+    }
 }
 
 pub fn take_whitespace<'a>(pairs: &mut Pairs<'a, Rule>) -> Option<Pair<'a, Rule>> {

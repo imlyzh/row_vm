@@ -1,5 +1,5 @@
-
-pub struct TopLevel<'a>(pub Vec<Message<'a>>);
+/// expression = { (message | sctpad)+ }
+pub type Expression<'a> = Vec<Message<'a>>;
 
 /// message = { wcpad* ~ symbol ~ scpad* ~ arguments* }
 pub struct Message<'a> {
@@ -10,7 +10,7 @@ pub struct Message<'a> {
 pub type Args<'a> = Vec<Argument<'a>>;
 
 /// argument = { wcpad* ~expression ~ wcpad* }
-pub type Argument<'a> = Message<'a>;
+pub type Argument<'a> = Expression<'a>;
 
 /// symbol = { number | Operator | quote | Identifier }
 pub enum Symbol<'a> {
