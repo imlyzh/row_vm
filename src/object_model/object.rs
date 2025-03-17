@@ -13,6 +13,6 @@ pub struct ObjectHead {
 }
 
 pub struct Object {
-    pub object_head: ObjectHead,
+    pub head: ObjectHead,
     pub instance: u8,
 }
