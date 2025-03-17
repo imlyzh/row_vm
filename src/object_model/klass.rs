@@ -14,6 +14,19 @@ pub struct Klass {
 }
 
 impl Klass {
+    pub fn new(klass_name: String) -> Self {
+        Self {
+            klass_name,
+            // static_fields: HashMap::new(),
+            fields: HashMap::new(),
+            reference_size: 0,
+            u64_size: 0,
+            u32_size: 0,
+            u16_size: 0,
+            u8_size: 0,
+        }
+    }
+
     pub fn get_object_size(&self, is_pointer_compression: bool) -> usize {
         let reference_byte_size = if is_pointer_compression {
             self.reference_size as usize * 4
