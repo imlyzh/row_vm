@@ -1,9 +1,10 @@
 use std::{collections::HashMap, ptr::NonNull};
 
-use crate::utils::{align, align_reference};
+use crate::{method::Method, utils::{align, align_reference}};
 
 pub struct Klass {
     pub klass_name: String,
+    pub methods: HashMap<String, Method>,
     // pub static_fields: HashMap<String, Field>,
     pub fields: HashMap<String, Field>,
     pub reference_size: u16,
@@ -17,6 +18,7 @@ impl Klass {
     pub fn new(klass_name: String) -> Self {
         Self {
             klass_name,
+            methods: HashMap::new(),
             // static_fields: HashMap::new(),
             fields: HashMap::new(),
             reference_size: 0,
