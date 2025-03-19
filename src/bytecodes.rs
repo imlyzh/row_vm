@@ -49,7 +49,79 @@ pub enum ByteCode {
     f64_min,
     f64_max,
 
+    // comparison
+    i32_eq,
+    i32_ne,
+    i32_lt,
+    i32_le,
+    i32_gt,
+    i32_ge,
+
+    i64_eq,
+    i64_ne,
+    i64_lt,
+    i64_le,
+    i64_gt,
+    i64_ge,
+
+    f32_eq,
+    f32_ne,
+    f32_lt,
+    f32_le,
+    f32_gt,
+    f32_ge,
+
+    f64_eq,
+    f64_ne,
+    f64_lt,
+    f64_le,
+    f64_gt,
+    f64_ge,
+
+    // conversion
+    i32_to_i64,
+    i32_to_f32,
+    i32_to_f64,
+
+    i64_to_i32,
+    i64_to_f32,
+    i64_to_f64,
+
+    f32_to_i32,
+    f32_to_i64,
+    f32_to_f64,
+
+    f64_to_i32,
+    f64_to_i64,
+    f64_to_f32,
+
+    // control flow
+    jump_if,
+    always_jump,
+
+    // function call
+    call,
+    return_,
+    return_void,
+
+    // object
+    new,
     ref_null,
+    get_field,
+    set_field,
+
+    invoke,
+    // native_invoke,
+
+    // array
+    new_array,
+    array_load,
+    array_store,
+    array_length,
+
+    // exception
+    // throw,
+    // catch,
 }
 
 #[repr(C)]
