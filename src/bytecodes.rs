@@ -181,6 +181,7 @@ pub enum ByteCode {
     nop,
     unreachable,
     if_,
+    switch_,
 
     /// ## Reference instructions
     ref_null,
@@ -191,23 +192,3 @@ pub enum ByteCode {
     new_array,
 
 }
-
-#[repr(C)]
-pub struct Const32 {
-    pub value: i32,
-    pub dst: u16,
-}
-
-#[repr(C)]
-pub struct Const64 {
-    pub value: i64,
-    pub dst: u16,
-}
-
-#[repr(C)]
-pub struct ThreeAddressCode {
-    pub dst: u16,
-    pub src1: u16,
-    pub src2: u16,
-}
-
