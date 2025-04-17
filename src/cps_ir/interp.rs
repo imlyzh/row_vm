@@ -132,6 +132,8 @@ pub fn interp<'a>(ir: &'a IR, env: HashMap<&'a str, usize>, store: &mut Store<'a
             };
             interp(body,new_env, store)
         }
-
+        IR::Return(atom) => {
+            interp_atom(atom, &env, store)
+        }
     }
 }
