@@ -23,7 +23,7 @@ pub enum Value<'a>{
   Char(char),
   StringLiteral(String),
   Clo(&'a Vec<String>,&'a IR,HashMap<&'a str,usize>),
-  Cont(&'a Vec<String>,&'a IR,HashMap<&'a str,usize>)
+  Cont(&'a Vec<String>,&'a IR,HashMap<&'a str,usize>),
 }
 
 impl<'a> PartialEq for Value<'a> {

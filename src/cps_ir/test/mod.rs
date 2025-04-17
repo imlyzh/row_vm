@@ -1,4 +1,4 @@
-use super::{interp, Atom, Store, Value, IR};
+use super::{interp, Atom, Store, Value, IR,Cont};
 use std::collections::HashMap;
 
 fn simple_interp<'a>(term: &'a IR) -> Value<'a> {
@@ -29,15 +29,9 @@ pub fn test2() {
         Box::new(IR::App(
             Atom::Var("f".to_string()),
             vec![Atom::I32(100)],
-            "k".to_string(),
+            Cont::Return,
         )),
     );
-    let term_with_k = IR::LetCont(
-        "k".to_string(),
-        vec!["x".to_string()],
-        Box::new(IR::Return(Atom::Var("x".to_string()))),
-        Box::new(term),
-    );
-    let result = simple_interp(&term_with_k);
+    let result = simple_interp(&term);
     assert_eq!(result,Value::I32(100));
 }

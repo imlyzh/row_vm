@@ -1,4 +1,4 @@
-use super::{builtin_call, Atom, Value, IR};
+use super::{builtin_call, Atom, Value, IR, Cont};
 use std::collections::HashMap;
 
 pub struct Store<'a> {
@@ -54,7 +54,7 @@ pub fn interp_atom<'a>(
     }
 }
 
-pub fn apply_cont<'a>(
+pub fn apply_cont_by_name<'a>(
     cont_name: &'a str,
     values: Vec<Value<'a>>,
     env: HashMap<&'a str, usize>,
@@ -78,6 +78,18 @@ pub fn apply_cont<'a>(
     }
 }
 
+pub fn apply_cont<'a>(
+    cont: &'a Cont,
+    values:Vec<Value<'a>>,
+    env: HashMap<&'a str, usize>,
+    store: &mut Store<'a>,
+) -> Value<'a> {
+    match cont {
+        Cont::Named(cont_name) => apply_cont_by_name(&cont_name, values, env, store),
+        Cont::Return => values[0].clone()
+    }
+}
+
 pub fn interp<'a>(ir: &'a IR, env: HashMap<&'a str, usize>, store: &mut Store<'a>) -> Value<'a> {
     match ir {
         IR::LetCont(cont_name, args, cont_body, body) => {
@@ -95,19 +107,19 @@ pub fn interp<'a>(ir: &'a IR, env: HashMap<&'a str, usize>, store: &mut Store<'a
             new_env.insert(&bind,store.alloc(result));
             interp(body,new_env,store)
         }
-        IR::If(test, then_cont_name, else_cont_name) => match interp_atom(test, &env, store) {
+        IR::If(test, then_cont, else_cont) => match interp_atom(test, &env, store) {
             Value::Bool(b) => {
                 if b {
-                    apply_cont(&then_cont_name, vec![], env, store)
+                    apply_cont(&then_cont, vec![], env, store)
                 } else {
-                    apply_cont(&else_cont_name, vec![], env, store)
+                    apply_cont(&else_cont, vec![], env, store)
                 }
             }
             _ => {
                 panic!("if: test should be a boolean")
             }
         }
-        IR::App(f, args, cont_name) => {
+        IR::App(f, args, cont) => {
             let f_value = interp_atom(f, &env, store);
             let Value::Clo(vars, body, clo_env) = f_value else {
                 panic!("application: not a function");
@@ -118,7 +130,7 @@ pub fn interp<'a>(ir: &'a IR, env: HashMap<&'a str, usize>, store: &mut Store<'a
                 new_env.insert(var, store.alloc(val));
             }
             let result = interp(body, new_env,store);
-            apply_cont(cont_name, vec![result], env,store)
+            apply_cont(cont, vec![result], env,store)
         }
         IR::Fix(vars, vals,body)  => {
             let mut new_env = env;
