@@ -6,6 +6,6 @@ mod ir;
 mod test;
 
 pub use atom::{Atom, Value};
-pub use ir::IR;
+pub use ir::{IR,Cont};
 pub use builtin_call::builtin_call;
 pub use interp::{interp,Store};
